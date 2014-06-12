@@ -1,26 +1,30 @@
+BetterMask = angular.module('better.mask', [])
+
 ensure_numeric_string = (val) ->
   val = val.toString() if angular.isNumber(val)
   return '' unless angular.isString(val)
   val.replace(/\D/g,'')
 
+filters =
+  credit_card_format: (val) ->
+    val = ensure_numeric_string(val)
+    if val == ''
+      return ''
+    else if /^3[47]/.test(val)
+      [val[...4], val[4...10], val[10...15]].filter(angular.identity).join(" ")
+    else
+      val[0..15].match(/\d{1,4}/g).join " "
+
+  credit_card_type: (val) ->
+    val = ensure_numeric_string(val)
+    Stripe.cardType(val).toLowerCase().replace(" ", '-')
 
 
-angular.module('better.mask', [])
-  .filter 'betterCreditCard', ->
-    (val) ->
-      val = ensure_numeric_string(val)
-      if val == ''
-        return ''
-      else if /^3[47]/.test(val)
-        [val[...4], val[4...10], val[10...15]].filter(angular.identity).join(" ")
-      else
-        val[0..15].match(/\d{1,4}/g).join " "
+angular.forEach filters, (func, name) ->
+  BetterMask.filter name, -> func
 
-  .filter 'creditCardType', ->
-    (val) ->
-      val = ensure_numeric_string(val)
-      Stripe.cardType(val).toLowerCase().replace(" ", '-')
 
+BetterMask
   .factory 'CaretPosition', ->
     class CaretPosition
       constructor: (element) ->
@@ -49,35 +53,42 @@ angular.module('better.mask', [])
           range.moveStart "character", pos
           range.select()
 
-  .directive 'cardNumberInput', ($filter, $parse, CaretPosition) ->
+  .directive 'cardNumberInput', ($filter, CaretPosition) ->
     restrict: 'A'
     require: 'ngModel'
-    priority: 10
     link: (scope, element, attrs, model) ->
       caret = new CaretPosition(element)
 
-      model.$parsers.unshift ensure_numeric_string
-      model.$formatters.unshift $filter('betterCreditCard')
-      setter = $parse(attrs.ngModel).assign
-      old_render = model.$render
+      view_changed = (view) ->
+        formatted = $filter('credit_card_format')(view)
 
+        if formatted != view
+          cursor_pos = caret.get()
+          console.log
+            cursor_pos: cursor_pos
+            fmt: formatted.length
+            val: view.length
+          if cursor_pos != view.length
+            char = formatted[cursor_pos - 1]
+
+            model.$caret = cursor_pos
+            model.$caret += 1 if char == " "
+
+          model.$setViewValue formatted
+          model.$render()
+
+      model.$parsers.unshift (val) ->
+        clean = ensure_numeric_string(val)
+        view_changed(val)
+        clean
+
+      model.$formatters.unshift $filter('credit_card_format')
+
+      old_render = model.$render
       model.$render = ->
         old_render()
         if model.$caret
           caret.set(model.$caret)
           model.$caret = null
 
-      model.$viewChangeListeners.push ->
-        view = model.$viewValue
-        formatted = $filter('betterCreditCard')(view)
-
-        if formatted != view
-          console.log view
-          cursor_pos = caret.get()
-          if cursor_pos != view.length
-            char = formatted[cursor_pos - 1]
-
-            model.$caret = cursor_pos
-            model.$caret += 1 if char == " "
-          setter scope, formatted
 

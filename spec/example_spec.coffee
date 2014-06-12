@@ -36,15 +36,21 @@ describe 'better.mask', ->
       it 'should update the model', ->
         expect(@scope.card.number).toBe '123456'
 
+    describe 'non-numeric input', ->
+      it 'a', ->
+        @input.val('aaa').triggerHandler("input")
+        expect(@input.val()).toBe ''
+        expect(@model.$viewValue).toBe ''
+        expect(@scope.card.number).toBe ''
 
-  describe "betterCreditCard", ->
+  describe "credit_card_format", ->
     example_cards =
       '4242424242424242': '4242 4242 4242 4242'
       '378282246310005': '3782 822463 10005'
       '30569309025904': '3056 9309 0259 04'
 
     beforeEach inject ($filter) ->
-      @cardFilter = $filter('betterCreditCard')
+      @cardFilter = $filter('credit_card_format')
 
     describe 'non-string values', ->
       it 'falsey', ->
