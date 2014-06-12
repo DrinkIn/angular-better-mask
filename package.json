@@ -1,0 +1,25 @@
+{
+  "name": "angular-better-mask",
+  "version": "0.0.0",
+  "description": "Angular Input Masks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "angular",
+    "angularjs",
+    "input",
+    "mask"
+  ],
+  "author": "George Erickson",
+  "license": "ISC",
+  "devDependencies": {
+    "karma": "^0.12.16",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-jasmine": "^0.1.5",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-coffee-preprocessor": "^0.2.1",
+    "karma-osx-reporter": "^0.1.0"
+  }
+}
