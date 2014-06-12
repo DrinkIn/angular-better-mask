@@ -2,7 +2,12 @@ module.exports = function(config) {
   config.set({
     basePath: '',
     frameworks: ['jasmine'],
-    files: ['spec/**/*.coffee', 'src/**/*.coffee'],
+    files: [
+      'bower_components/angular/angular.js',
+      'bower_components/angular-mocks/angular-mocks.js',
+      'spec/**/*.coffee',
+      'src/**/*.coffee'
+    ],
     exclude: [],
     preprocessors: {
       '**/*.coffee': ['coffee']
