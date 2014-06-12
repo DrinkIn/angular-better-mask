@@ -35,6 +35,11 @@ describe 'better.mask', ->
       it 'should update the model', ->
         expect(@scope.card.number).toBe '123456'
 
+    describe 'edge cases', ->
+      it 'handles long user input', ->
+        @input.val('12345678912345678').triggerHandler("input")
+        expect(@scope.card.number).toBe '1234567891234567'
+
     describe 'non-numeric input', ->
       it 'a', ->
         @input.val('aaa').triggerHandler("input")

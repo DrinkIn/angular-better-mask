@@ -59,6 +59,11 @@ BetterMask
     link: (scope, element, attrs, model) ->
       caret = new CaretPosition(element)
 
+      restrictCard = (e) ->
+        num = String.fromCharCode(e.which)
+
+        e.preventDefault() unless /^\d+$/.test(num)
+
       view_changed = (view) ->
         formatted = $filter('credit_card_format')(view)
 
@@ -74,10 +79,10 @@ BetterMask
 
       model.$parsers.unshift (val) ->
         view_changed(val)
-        ensure_numeric_string(val)
+        ensure_numeric_string(val)[..15]
 
       model.$formatters.unshift $filter('credit_card_format')
 
 
-
+      element.bind 'keypress', restrictCard
 
