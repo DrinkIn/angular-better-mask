@@ -73,9 +73,8 @@ BetterMask
             caret.set cursor_pos
 
       model.$parsers.unshift (val) ->
-        clean = ensure_numeric_string(val)
         view_changed(val)
-        clean
+        ensure_numeric_string(val)
 
       model.$formatters.unshift $filter('credit_card_format')
 
