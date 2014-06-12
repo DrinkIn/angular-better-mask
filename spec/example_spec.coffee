@@ -24,7 +24,6 @@ describe 'better.mask', ->
       it 'should update the model', ->
         expect(@scope.card.number).toBe '123456'
 
-
     describe 'user input', ->
       beforeEach ->
         @input.val('123456').triggerHandler("input")
@@ -67,9 +66,11 @@ describe 'better.mask', ->
     describe 'card types', ->
       it 'should format visa correctly', ->
         expect(@cardFilter('4242424242424242')).toEqual '4242 4242 4242 4242'
+
       it 'should format amex correctly', ->
         expect(@cardFilter('378282246310005')).toEqual '3782 822463 10005'
         expect(@cardFilter('37828')).toEqual '3782 8'
+
       it 'should format diners correctly', ->
         expect(@cardFilter('30569309025904')).toEqual '3056 9309 0259 04'
 

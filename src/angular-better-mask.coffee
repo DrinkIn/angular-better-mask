@@ -64,18 +64,13 @@ BetterMask
 
         if formatted != view
           cursor_pos = caret.get()
-          console.log
-            cursor_pos: cursor_pos
-            fmt: formatted.length
-            val: view.length
-          if cursor_pos != view.length
-            char = formatted[cursor_pos - 1]
-
-            model.$caret = cursor_pos
-            model.$caret += 1 if char == " "
-
           model.$setViewValue formatted
           model.$render()
+
+          if cursor_pos != view.length
+            char = formatted[cursor_pos - 1]
+            cursor_pos += 1 if char == " "
+            caret.set cursor_pos
 
       model.$parsers.unshift (val) ->
         clean = ensure_numeric_string(val)
@@ -84,11 +79,6 @@ BetterMask
 
       model.$formatters.unshift $filter('credit_card_format')
 
-      old_render = model.$render
-      model.$render = ->
-        old_render()
-        if model.$caret
-          caret.set(model.$caret)
-          model.$caret = null
+
 
 
