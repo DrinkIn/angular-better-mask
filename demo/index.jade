@@ -1,0 +1,40 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name="viewport", content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width")
+    link(rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
+
+
+    - var angular_deps = ['angular.js'];
+    - each ad in angular_deps
+      script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.10/'+ad)
+    script(src="https://js.stripe.com/v2/")
+    script(src='/src/angular-better-mask.js')
+    script(src='/demo/app.js')
+  body(ng-app="demo")
+    .container
+      .panel.panel-default(ng-controller='CardExampleCtrl')
+        .panel-heading Credit Card
+        .panel-body
+          table.table.table-condensed.table-bordered
+            thead
+              tr
+                th Number
+                th Type
+            tbody
+              tr(ng-repeat='(num, type) in test_cards')
+                td(style='width: 160px;')
+                  a(href='', ng-click='select_num(num)'){{num}}
+                td {{type}}
+          form
+            .form-group
+              label Credit Card Input
+              input.form-control(
+                type='text'
+                ng-model='card.number'
+                card-number-input
+              )
+          p {{card.number | creditCardType}}
+          pre {{card | json}}
