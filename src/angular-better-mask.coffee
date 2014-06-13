@@ -23,7 +23,6 @@ filters =
 angular.forEach filters, (func, name) ->
   BetterMask.filter name, -> func
 
-
 BetterMask
   .factory 'CaretPosition', ->
     class CaretPosition

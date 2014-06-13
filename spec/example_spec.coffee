@@ -47,6 +47,20 @@ describe 'better.mask', ->
         expect(@model.$viewValue).toBe ''
         expect(@scope.card.number).toBe ''
 
+  describe 'CaretPosition', ->
+    inputHtml = "<input name='input' ng-model='card.number' card-number-input>"
+    beforeEach inject ($rootScope, $compile, CaretPosition) ->
+      @scope = $rootScope.$new()
+      @input = $compile(inputHtml)(@scope)
+      @model = @input.controller('ngModel')
+      @caret = new CaretPosition(@input)
+
+    it 'a', ->
+      @input.val('123').triggerHandler("input")
+      @caret.set(1)
+      ev = angular.element.Event('keydown')
+      ev.which = 192
+      @input.trigger ev
   describe "credit_card_format", ->
     example_cards =
       '4242424242424242': '4242 4242 4242 4242'

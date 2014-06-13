@@ -8,7 +8,7 @@ module.exports = function(config) {
       'spec/**/*.coffee',
       'src/**/*.coffee'
     ],
-    exclude: [],
+    exclude: ['spec/e2e/*'],
     preprocessors: {
       '**/*.coffee': ['coffee']
     },
